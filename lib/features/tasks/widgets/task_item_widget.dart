@@ -4,7 +4,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/core/firebase_utils.dart';
 import 'package:to_do_app/core/setting_provider.dart';
-import 'package:to_do_app/features/tasks/edit_task_view.dart';
+import 'package:to_do_app/features/tasks/widgets/edit_task_view.dart';
+import 'package:to_do_app/features/tasks/widgets/delete_task_view.dart';
 import '../../../model/task_model.dart';
 import '../../settings/settings_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -73,10 +74,7 @@ class TaskItemWidget extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: (context) {
-                EasyLoading.show();
-                FirebaseUtils.deleteTask(taskModel).then(
-                  (value) => EasyLoading.dismiss(),
-                );
+                showDialog(context: context, builder: (context) => DeleteTaskView(taskModel: taskModel),);
               },
               padding: EdgeInsets.zero,
               borderRadius: provider.isEn()

@@ -28,5 +28,7 @@
   "delete": "Delete",
   "edit": "Edit",
   "email": "E-mail",
-  "password": "password"
+  "password": "password",
+  "deleteThisTaskPermanently": "Delete this Task permanently?",
+  "donee": "Done"
 }

@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       themeMode: provider.curTheme,
       theme: ApplicationThemeManager.light(provider.isEn()),
       darkTheme: ApplicationThemeManager.dark(provider.isEn()),
-      initialRoute: PageRouteNames.login,
+      initialRoute: PageRouteNames.initial,
       onGenerateRoute: RouteGenerator.onGenerateRoute,
       builder: EasyLoading.init(
         builder: BotToastInit(),

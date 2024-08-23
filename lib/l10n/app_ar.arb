@@ -26,5 +26,8 @@
   "date": "التاريخ",
   "logout": "تسحيل الخروج",
   "delete": "حذف",
-  "edit": "تعديل"
+  "edit": "تعديل",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "deleteThisTaskPermanently": "حذف هذه المهمة؟"
 }
