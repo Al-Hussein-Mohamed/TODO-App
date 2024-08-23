@@ -37,182 +37,184 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     return SingleChildScrollView(
       padding:
           EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Container(
-        height: screenHeight * 0.54,
-        width: screenWidth,
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 25),
-        decoration: BoxDecoration(
-          color: secondaryColor,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
+      child: Expanded(
+        child: Container(
+          height: screenHeight * 0.65,
+          width: screenWidth,
+          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 25),
+          decoration: BoxDecoration(
+            color: secondaryColor,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
           ),
-        ),
-        child: Form(
-          key: formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                lang.addNewTask,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: theme.primaryColor,
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * .05,
-              ),
-              TextFormField(
-                controller: titleController,
-                cursorColor: textColor,
-                cursorErrorColor: Colors.red,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: textColor,
-                  fontWeight: FontWeight.w500,
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "invalid title";
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: lang.title,
-                  labelStyle: theme.textTheme.titleLarge?.copyWith(
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  lang.addNewTask,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleLarge?.copyWith(
                     color: theme.primaryColor,
                   ),
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: theme.primaryColor, width: 1.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: theme.primaryColor, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
                 ),
-              ),
-              SizedBox(
-                height: screenHeight * .03,
-              ),
-              TextFormField(
-                controller: descriptionController,
-                cursorColor: textColor,
-                cursorErrorColor: Colors.red,
-                maxLines: 4,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: textColor,
-                  fontWeight: FontWeight.w500,
+                SizedBox(
+                  height: screenHeight * .05,
                 ),
-                decoration: InputDecoration(
-                  labelText: lang.description,
-                  labelStyle: theme.textTheme.titleLarge?.copyWith(
-                    color: theme.primaryColor,
+                TextFormField(
+                  controller: titleController,
+                  cursorColor: textColor,
+                  cursorErrorColor: Colors.red,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: textColor,
+                    fontWeight: FontWeight.w500,
                   ),
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: theme.primaryColor, width: 1.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: theme.primaryColor, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * .05,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.date_range_rounded,
-                        color: theme.primaryColor,
-                      ),
-                      const SizedBox(
-                        width: 7,
-                      ),
-                      Text(
-                        lang.selectDate,
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          color: theme.primaryColor,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {
-                      getSelectedDate();
-                    },
-                    child: Text(
-                      DateFormat("dd / MM / yyyy").format(selectedDate),
-                      style: theme.textTheme.displayLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: textColor,
-                      ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "invalid title";
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                    labelText: lang.title,
+                    labelStyle: theme.textTheme.titleLarge?.copyWith(
+                      color: theme.primaryColor,
+                    ),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: theme.primaryColor, width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: theme.primaryColor, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                ],
-              ),
-              const Spacer(),
-              InkWell(
-                onTap: () {
-                  if (formKey.currentState!.validate()) {
-                    EasyLoading.show();
-                    FirebaseUtils.addTaskToFirestore(
-                      TaskModel(
-                          title: titleController.text,
-                          description: descriptionController.text,
-                          selectedDate: extractDate(selectedDate)),
-                    ).then(
-                      (value) {
-                        Navigator.pop(context);
-                        EasyLoading.dismiss();
-                      },
-                    );
-                  }
-                },
-                child: Container(
-                  width: screenWidth * .7,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor,
-                    borderRadius: BorderRadius.circular(15),
+                ),
+                SizedBox(
+                  height: screenHeight * .03,
+                ),
+                TextFormField(
+                  controller: descriptionController,
+                  cursorColor: textColor,
+                  cursorErrorColor: Colors.red,
+                  maxLines: 4,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: textColor,
+                    fontWeight: FontWeight.w500,
                   ),
-                  child: Text(
-                    lang.addTask,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.titleMedium
-                        ?.copyWith(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: lang.description,
+                    labelStyle: theme.textTheme.titleLarge?.copyWith(
+                      color: theme.primaryColor,
+                    ),
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: theme.primaryColor, width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: theme.primaryColor, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: screenHeight * .05,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.date_range_rounded,
+                          color: theme.primaryColor,
+                        ),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text(
+                          lang.selectDate,
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            color: theme.primaryColor,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                    InkWell(
+                      onTap: () {
+                        getSelectedDate();
+                      },
+                      child: Text(
+                        DateFormat("dd / MM / yyyy").format(selectedDate),
+                        style: theme.textTheme.displayLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: textColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                InkWell(
+                  onTap: () {
+                    if (formKey.currentState!.validate()) {
+                      EasyLoading.show();
+                      FirebaseUtils.addTaskToFirestore(
+                        TaskModel(
+                            title: titleController.text,
+                            description: descriptionController.text,
+                            selectedDate: extractDate(selectedDate)),
+                      ).then(
+                        (value) {
+                          Navigator.pop(context);
+                          EasyLoading.dismiss();
+                        },
+                      );
+                    }
+                  },
+                  child: Container(
+                    width: screenWidth * .7,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      color: theme.primaryColor,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      lang.addTask,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

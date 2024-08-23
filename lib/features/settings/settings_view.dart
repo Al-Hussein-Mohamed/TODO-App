@@ -72,12 +72,12 @@ class SettingsView extends StatelessWidget {
                   expandedFillColor: secondaryColor,
                   listItemStyle: theme.textTheme.bodyLarge?.copyWith(
                       color: textColor,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
                   headerStyle: theme.textTheme.bodyLarge?.copyWith(
                       color: textColor,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(
@@ -108,20 +108,18 @@ class SettingsView extends StatelessWidget {
                   expandedFillColor: secondaryColor,
                   listItemStyle: theme.textTheme.bodyLarge?.copyWith(
                       color: textColor,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
                   headerStyle: theme.textTheme.bodyLarge?.copyWith(
                       color: textColor,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(
                 height: screenHeight * 0.07,
               ),
               Container(
-                width: screenWidth * .7,
-                margin: EdgeInsets.symmetric(horizontal: screenWidth * .2),
                 padding: const EdgeInsets.symmetric(vertical: 17),
                 decoration: BoxDecoration(
                   color: secondaryColor,
