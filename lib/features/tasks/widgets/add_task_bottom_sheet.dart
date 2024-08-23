@@ -21,6 +21,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   var formKey = GlobalKey<FormState>();
   var titleController = TextEditingController();
   var descriptionController = TextEditingController();
+  var valid = true;
   DateTime selectedDate = DateTime.now();
 
   @override
@@ -81,7 +82,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               decoration: InputDecoration(
                 labelText: lang.title,
                 labelStyle: theme.textTheme.titleLarge?.copyWith(
-                  color: theme.primaryColor,
+                  color: valid ? theme.primaryColor : Colors.red,
                 ),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 enabledBorder: OutlineInputBorder(
@@ -182,6 +183,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             InkWell(
               onTap: () {
                 if (formKey.currentState!.validate()) {
+                  setState(() => valid = true,);
                   EasyLoading.show();
                   FirebaseUtils.addTaskToFirestore(
                     TaskModel(
@@ -194,7 +196,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                       EasyLoading.dismiss();
                     },
                   );
+                } else {
+                  setState(() => valid = false,);
                 }
+                print(valid);
               },
               child: Container(
                 width: screenWidth * .7,

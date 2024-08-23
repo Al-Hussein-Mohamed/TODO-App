@@ -29,5 +29,6 @@
   "edit": "تعديل",
   "email": "البريد الإلكتروني",
   "password": "كلمة المرور",
-  "deleteThisTaskPermanently": "حذف هذه المهمة؟"
+  "deleteThisTaskPermanently": "حذف هذه المهمة؟",
+  "donee": "تم"
 }

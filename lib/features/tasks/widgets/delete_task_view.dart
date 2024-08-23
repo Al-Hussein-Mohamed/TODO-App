@@ -25,67 +25,71 @@ class DeleteTaskView extends StatelessWidget {
     return Center(
       child: AlertDialog(
         backgroundColor: secondaryColor,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              lang.deleteThisTaskPermanently,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleLarge?.copyWith(
-                color: theme.primaryColor,
-                fontSize: 30,
-              ),
-            ),
-            SizedBox(
-              height: screenHeight * .04,
-            ),
-            InkWell(
-              onTap: () {
-                EasyLoading.show();
-                FirebaseUtils.deleteTask(taskModel).then((value) {
-                  Navigator.pop(context);
-                  EasyLoading.dismiss();
-                },);
-              },
-              child: Container(
-                width: screenWidth * .7,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(
-                  lang.delete,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: Colors.white),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: screenHeight * .02,
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Container(
-                width: screenWidth * .7,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
+        insetPadding: EdgeInsets.zero,
+        content: Container(
+          width: screenWidth * .75,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                lang.deleteThisTaskPermanently,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleLarge?.copyWith(
                   color: theme.primaryColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(
-                  lang.cancel,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: Colors.white),
+                  fontSize: 30,
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                height: screenHeight * .04,
+              ),
+              InkWell(
+                onTap: () {
+                  EasyLoading.show();
+                  FirebaseUtils.deleteTask(taskModel).then((value) {
+                    Navigator.pop(context);
+                    EasyLoading.dismiss();
+                  },);
+                },
+                child: Container(
+                  width: screenWidth * .7,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    lang.delete,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * .02,
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: screenWidth * .7,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: theme.primaryColor,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    lang.cancel,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

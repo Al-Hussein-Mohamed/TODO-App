@@ -21,6 +21,9 @@ class _RegistrationViewState extends State<RegistrationView> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   bool isObsecure = true;
+  bool fullNameValidation = true;
+  bool emailValidation = true;
+  bool passwordValidation = true;
 
   @override
   Widget build(BuildContext context) {
@@ -72,33 +75,44 @@ class _RegistrationViewState extends State<RegistrationView> {
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return "invalid E-mail";
+                        fullNameValidation = false;
+                        return "invalid Name";
                       }
+                      fullNameValidation = true;
                       return null;
                     },
                     decoration: InputDecoration(
                       labelText: lang.fullName,
                       labelStyle: theme.textTheme.titleLarge?.copyWith(
-                        color: theme.primaryColor,
+                        color: fullNameValidation
+                            ? theme.primaryColor
+                            : Colors.red,
                       ),
-                      suffixIcon: Icon(Icons.person, color: theme.primaryColor,),
+                      suffixIcon: Icon(
+                        Icons.person,
+                        color: fullNameValidation
+                            ? theme.primaryColor
+                            : Colors.red,
+                      ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: theme.primaryColor, width: 1.0),
+                            BorderSide(color: theme.primaryColor, width: 1.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: theme.primaryColor, width: 2.0),
+                            BorderSide(color: theme.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
@@ -116,40 +130,48 @@ class _RegistrationViewState extends State<RegistrationView> {
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return "invalid email";
+                        emailValidation = false;
+                        return "invalid E-mail";
                       }
 
                       var regex = RegExp(
                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
                       if (!regex.hasMatch(value)) {
-                        return "invalid email";
+                        emailValidation = false;
+                        return "invalid E-mail";
                       }
+                      emailValidation = true;
                       return null;
                     },
                     decoration: InputDecoration(
                       labelText: lang.email,
                       labelStyle: theme.textTheme.titleLarge?.copyWith(
-                        color: theme.primaryColor,
+                        color: emailValidation ? theme.primaryColor : Colors.red,
                       ),
-                      suffixIcon: Icon(Icons.email, color: theme.primaryColor,),
+                      suffixIcon: Icon(
+                        Icons.email,
+                        color: emailValidation ? theme.primaryColor : Colors.red,
+                      ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: theme.primaryColor, width: 1.0),
+                            BorderSide(color: theme.primaryColor, width: 1.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: theme.primaryColor, width: 2.0),
+                            BorderSide(color: theme.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
@@ -161,31 +183,45 @@ class _RegistrationViewState extends State<RegistrationView> {
                     controller: passwordController,
                     cursorColor: theme.primaryColor,
                     cursorErrorColor: Colors.red,
-                    obscureText: isObsecure,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: textColor,
                       fontWeight: FontWeight.w500,
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return "invalid E-mail";
+                        passwordValidation = false;
+                        return "invalid Password";
                       }
+                      passwordValidation = true;
                       return null;
                     },
+                    obscureText: isObsecure,
                     decoration: InputDecoration(
                       labelText: lang.password,
                       labelStyle: theme.textTheme.titleLarge?.copyWith(
-                        color: theme.primaryColor,
+                        color: passwordValidation
+                            ? theme.primaryColor
+                            : Colors.red,
                       ),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            isObsecure = !isObsecure;
-                            setState(() {});
-                          },
-                          icon: isObsecure
-                              ? Icon(Icons.visibility, color: theme.primaryColor,)
-                              :  Icon(Icons.visibility_off, color: theme.primaryColor,),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          isObsecure = !isObsecure;
+                          setState(() {});
+                        },
+                        icon: isObsecure
+                            ? Icon(
+                          Icons.visibility,
+                          color: passwordValidation
+                              ? theme.primaryColor
+                              : Colors.red,
+                        )
+                            : Icon(
+                          Icons.visibility_off,
+                          color: passwordValidation
+                              ? theme.primaryColor
+                              : Colors.red,
                         ),
+                      ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       enabledBorder: OutlineInputBorder(
                         borderSide:
@@ -198,15 +234,16 @@ class _RegistrationViewState extends State<RegistrationView> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        borderSide:
+                        const BorderSide(color: Colors.red, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                        borderSide:
+                        const BorderSide(color: Colors.red, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-
                   ),
                   SizedBox(
                     height: screenHeight * .08,
@@ -229,6 +266,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                           },
                         );
                       }
+                      setState(() {});
                     },
                     style: FilledButton.styleFrom(
                       padding: EdgeInsets.symmetric(

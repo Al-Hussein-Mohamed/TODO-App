@@ -74,7 +74,10 @@ class TaskItemWidget extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: (context) {
-                showDialog(context: context, builder: (context) => DeleteTaskView(taskModel: taskModel),);
+                showDialog(
+                  context: context,
+                  builder: (context) => DeleteTaskView(taskModel: taskModel),
+                );
               },
               padding: EdgeInsets.zero,
               borderRadius: provider.isEn()
@@ -116,7 +119,6 @@ class TaskItemWidget extends StatelessWidget {
           ),
           child: ListTile(
             contentPadding: EdgeInsets.zero,
-
             leading: Container(
               width: 4,
               decoration: BoxDecoration(

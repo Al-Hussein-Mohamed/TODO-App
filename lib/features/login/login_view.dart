@@ -20,6 +20,8 @@ class _LoginViewState extends State<LoginView> {
   TextEditingController passwordController = TextEditingController();
 
   bool isObsecure = true;
+  bool passwordValidation = true;
+  bool emailValidation = true;
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -81,6 +83,7 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
+                        emailValidation = false;
                         return "invalid E-mail";
                       }
 
@@ -88,18 +91,22 @@ class _LoginViewState extends State<LoginView> {
                           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
                       if (!regex.hasMatch(value)) {
+                        emailValidation = false;
                         return "invalid E-mail";
                       }
+                      emailValidation = true;
                       return null;
                     },
                     decoration: InputDecoration(
                       labelText: lang.email,
                       labelStyle: theme.textTheme.titleLarge?.copyWith(
-                        color: theme.primaryColor,
+                        color:
+                            emailValidation ? theme.primaryColor : Colors.red,
                       ),
                       suffixIcon: Icon(
                         Icons.email,
-                        color: theme.primaryColor,
+                        color:
+                            emailValidation ? theme.primaryColor : Colors.red,
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       enabledBorder: OutlineInputBorder(
@@ -137,15 +144,19 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return "invalid E-mail";
+                        passwordValidation = false;
+                        return "invalid Password";
                       }
+                      passwordValidation = true;
                       return null;
                     },
                     obscureText: isObsecure,
                     decoration: InputDecoration(
                       labelText: lang.password,
                       labelStyle: theme.textTheme.titleLarge?.copyWith(
-                        color: theme.primaryColor,
+                        color: passwordValidation
+                            ? theme.primaryColor
+                            : Colors.red,
                       ),
                       suffixIcon: IconButton(
                         onPressed: () {
@@ -155,11 +166,15 @@ class _LoginViewState extends State<LoginView> {
                         icon: isObsecure
                             ? Icon(
                                 Icons.visibility,
-                                color: theme.primaryColor,
+                                color: passwordValidation
+                                    ? theme.primaryColor
+                                    : Colors.red,
                               )
                             : Icon(
                                 Icons.visibility_off,
-                                color: theme.primaryColor,
+                                color: passwordValidation
+                                    ? theme.primaryColor
+                                    : Colors.red,
                               ),
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -221,6 +236,7 @@ class _LoginViewState extends State<LoginView> {
                           },
                         );
                       }
+                      setState(() {});
                     },
                     style: FilledButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
