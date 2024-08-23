@@ -380,6 +380,7 @@ class _EditTaskViewState extends State<EditTaskView> {
     );
   }
 
+
   getSelectedDate() async {
     var curDate = await showDatePicker(
         context: context,
