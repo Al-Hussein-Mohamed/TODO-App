@@ -51,6 +51,7 @@ class DeleteTaskView extends StatelessWidget {
                     EasyLoading.dismiss();
                   },);
                 },
+                borderRadius: BorderRadius.circular(15),
                 child: Container(
                   width: screenWidth * .7,
                   padding: const EdgeInsets.symmetric(vertical: 10),
@@ -62,7 +63,7 @@ class DeleteTaskView extends StatelessWidget {
                     lang.delete,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.titleMedium
-                        ?.copyWith(color: Colors.white),
+                        ?.copyWith(color: secondaryColor),
                   ),
                 ),
               ),
@@ -73,6 +74,7 @@ class DeleteTaskView extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                 },
+                borderRadius: BorderRadius.circular(15),
                 child: Container(
                   width: screenWidth * .7,
                   padding: const EdgeInsets.symmetric(vertical: 10),
@@ -84,7 +86,7 @@ class DeleteTaskView extends StatelessWidget {
                     lang.cancel,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.titleMedium
-                        ?.copyWith(color: Colors.white),
+                        ?.copyWith(color: secondaryColor),
                   ),
                 ),
               ),

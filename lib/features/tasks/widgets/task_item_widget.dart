@@ -34,6 +34,7 @@ class TaskItemWidget extends StatelessWidget {
         taskModel.title,
         style: theme.textTheme.titleLarge?.copyWith(
           color: progressColor,
+          fontSize: 23,
         ),
       ),
     ];
@@ -42,6 +43,7 @@ class TaskItemWidget extends StatelessWidget {
         taskModel.title,
         style: theme.textTheme.titleLarge?.copyWith(
           color: progressColor,
+          fontSize: 22,
         ),
       ),
       const SizedBox(
@@ -98,7 +100,7 @@ class TaskItemWidget extends StatelessWidget {
               onPressed: (context) {
                 showDialog(
                   context: context,
-                  builder: (context) => EditTaskView(taskModel),
+                  builder: (context) => EditTaskView(TaskModel.set(taskModel)),
                 );
               },
               padding: EdgeInsets.zero,
@@ -119,6 +121,7 @@ class TaskItemWidget extends StatelessWidget {
           ),
           child: ListTile(
             contentPadding: EdgeInsets.zero,
+            horizontalTitleGap: 2,
             leading: Container(
               width: 4,
               decoration: BoxDecoration(
@@ -153,10 +156,10 @@ class TaskItemWidget extends StatelessWidget {
                         color: theme.primaryColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.check_rounded,
                         size: 40,
-                        color: Colors.white,
+                        color: secondaryColor,
                       ),
                     ),
                   ),

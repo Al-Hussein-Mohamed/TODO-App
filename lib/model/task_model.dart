@@ -2,10 +2,10 @@ class TaskModel {
   static const String collectionName = "TasksCollection";
   String? id;
   String? uid;
-  String title;
-  String description;
-  DateTime selectedDate;
-  bool isDone;
+  String title = " ";
+  String description = " ";
+  DateTime selectedDate = DateTime.now();
+  bool isDone = false;
 
   TaskModel(
       {required this.title,
@@ -14,6 +14,16 @@ class TaskModel {
       required this.description,
       required this.selectedDate,
       this.isDone = false});
+
+  TaskModel.init();
+  TaskModel.set(TaskModel taskModel){
+    id = taskModel.id;
+    uid = taskModel.uid;
+    title = taskModel.title;
+    description = taskModel.description;
+    selectedDate = taskModel.selectedDate;
+    isDone = taskModel.isDone;
+  }
 
   Map<String, dynamic> toJson() {
     return {

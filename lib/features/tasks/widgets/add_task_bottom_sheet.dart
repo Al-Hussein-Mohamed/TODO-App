@@ -212,7 +212,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   lang.addTask,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleMedium
-                      ?.copyWith(color: Colors.white),
+                      ?.copyWith(color: secondaryColor),
                 ),
               ),
             ),

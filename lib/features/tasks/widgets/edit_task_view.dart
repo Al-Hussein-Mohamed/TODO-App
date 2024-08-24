@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/core/firebase_utils.dart';
+import 'package:to_do_app/core/utils.dart';
 import 'package:to_do_app/services/snack_bar_service.dart';
 
 import '../../../core/setting_provider.dart';
@@ -38,6 +39,7 @@ class _EditTaskViewState extends State<EditTaskView> {
     super.initState();
     titleController.text = taskModel.title;
     descriptionController.text = taskModel.description;
+    selectedDate = taskModel.selectedDate;
   }
 
   @override
@@ -51,16 +53,13 @@ class _EditTaskViewState extends State<EditTaskView> {
     var secondaryColor =
         provider.isDark() ? const Color(0xFF141922) : Colors.white;
     var textColor = provider.isDark() ? Colors.white : Colors.black;
-    titleController.text = taskModel.title;
-    descriptionController.text = taskModel.description;
-    selectedDate = taskModel.selectedDate;
 
     return Center(
       child: SingleChildScrollView(
         child: AlertDialog(
           backgroundColor: secondaryColor,
           insetPadding: EdgeInsets.zero,
-          content: Container(
+          content: SizedBox(
             width: screenWidth * .75,
             child: StatefulBuilder(
               builder: (context, setState) => Form(
@@ -88,7 +87,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                         color: textColor,
                         fontWeight: FontWeight.w500,
                       ),
-                      onChanged: (value) => taskModel.title = value,
+                      // onChanged: (value) => taskModel.title = value,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           titleValidation = false;
@@ -138,7 +137,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                         color: textColor,
                         fontWeight: FontWeight.w500,
                       ),
-                      onChanged: (value) => taskModel.description = value,
+                      // onChanged: (value) => taskModel.description = value,
                       decoration: InputDecoration(
                         labelText: lang.description,
                         labelStyle: theme.textTheme.titleLarge?.copyWith(
@@ -212,6 +211,14 @@ class _EditTaskViewState extends State<EditTaskView> {
                                     onTap: () => setState(
                                       () => taskModel.isDone = false,
                                     ),
+                                    borderRadius: provider.isEn()
+                                        ? const BorderRadius.only(
+                                        topLeft: Radius.circular(13),
+                                        bottomLeft: Radius.circular(13))
+                                        : const BorderRadius.only(
+                                        topRight: Radius.circular(13),
+                                        bottomRight:
+                                        Radius.circular(13)),
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 3),
@@ -233,7 +240,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                                         size: 28,
                                         color: taskModel.isDone
                                             ? theme.primaryColor
-                                            : Colors.white,
+                                            : secondaryColor,
                                       ),
                                     ),
                                   ),
@@ -243,6 +250,15 @@ class _EditTaskViewState extends State<EditTaskView> {
                                     onTap: () => setState(
                                       () => taskModel.isDone = true,
                                     ),
+                                    borderRadius: provider.isEn()
+                                        ? const BorderRadius.only(
+                                        topRight: Radius.circular(13),
+                                        bottomRight:
+                                        Radius.circular(13))
+                                        : const BorderRadius.only(
+                                        topLeft: Radius.circular(13),
+                                        bottomLeft:
+                                        Radius.circular(13)),
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 3),
@@ -264,7 +280,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                                         Icons.check_rounded,
                                         size: 28,
                                         color: taskModel.isDone
-                                            ? Colors.white
+                                            ? secondaryColor
                                             : theme.primaryColor,
                                       ),
                                     ),
@@ -327,14 +343,10 @@ class _EditTaskViewState extends State<EditTaskView> {
                     ),
                     InkWell(
                       onTap: () {
-                        setState(
-                          () {
-                          },
-                        );
                         if (formKey.currentState!.validate()) {
                           EasyLoading.show();
-                          taskModel.title = titleController.text = taskModel.title.trim();
-                          taskModel.description = descriptionController.text = taskModel.description.trim();
+                          taskModel.title = titleController.text.trim();
+                          taskModel.description = descriptionController.text.trim();
                           FirebaseUtils.updateTask(taskModel).then(
                             (value) {
                               Navigator.pop(context);
@@ -342,7 +354,11 @@ class _EditTaskViewState extends State<EditTaskView> {
                             },
                           );
                         }
+                        setState(() {
+
+                        },);
                       },
+                      borderRadius: BorderRadius.circular(15),
                       child: Container(
                         width: screenWidth * .7,
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -354,7 +370,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                           lang.save,
                           textAlign: TextAlign.center,
                           style: theme.textTheme.titleMedium
-                              ?.copyWith(color: Colors.white),
+                              ?.copyWith(color: secondaryColor),
                         ),
                       ),
                     ),
@@ -365,6 +381,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                       onTap: () {
                         Navigator.pop(context);
                       },
+                      borderRadius: BorderRadius.circular(15),
                       child: Container(
                         width: screenWidth * .7,
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -376,7 +393,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                           lang.cancel,
                           textAlign: TextAlign.center,
                           style: theme.textTheme.titleMedium
-                              ?.copyWith(color: Colors.white),
+                              ?.copyWith(color: secondaryColor),
                         ),
                       ),
                     ),
@@ -396,7 +413,7 @@ class _EditTaskViewState extends State<EditTaskView> {
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(const Duration(days: 365)));
     if (curDate != null) {
-      setState(() => taskModel.selectedDate = curDate);
+      setState(() => taskModel.selectedDate = extractDate(curDate));
     }
   }
 }
