@@ -34,6 +34,13 @@ class _EditTaskViewState extends State<EditTaskView> {
   bool titleValidation = true;
 
   @override
+  void initState() {
+    super.initState();
+    titleController.text = taskModel.title;
+    descriptionController.text = taskModel.description;
+  }
+
+  @override
   Widget build(BuildContext context) {
     var lang = AppLocalizations.of(context)!;
     var provider = Provider.of<SettingProvider>(context);
@@ -81,6 +88,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                         color: textColor,
                         fontWeight: FontWeight.w500,
                       ),
+                      onChanged: (value) => taskModel.title = value,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           titleValidation = false;
@@ -130,6 +138,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                         color: textColor,
                         fontWeight: FontWeight.w500,
                       ),
+                      onChanged: (value) => taskModel.description = value,
                       decoration: InputDecoration(
                         labelText: lang.description,
                         labelStyle: theme.textTheme.titleLarge?.copyWith(
@@ -319,12 +328,13 @@ class _EditTaskViewState extends State<EditTaskView> {
                     InkWell(
                       onTap: () {
                         setState(
-                          () {},
+                          () {
+                          },
                         );
                         if (formKey.currentState!.validate()) {
                           EasyLoading.show();
-                          taskModel.title = titleController.text;
-                          taskModel.description = descriptionController.text;
+                          taskModel.title = titleController.text = taskModel.title.trim();
+                          taskModel.description = descriptionController.text = taskModel.description.trim();
                           FirebaseUtils.updateTask(taskModel).then(
                             (value) {
                               Navigator.pop(context);

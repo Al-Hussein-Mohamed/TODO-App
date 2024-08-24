@@ -187,8 +187,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   EasyLoading.show();
                   FirebaseUtils.addTaskToFirestore(
                     TaskModel(
-                        title: titleController.text,
-                        description: descriptionController.text,
+                        title: titleController.text.trim(),
+                        description: descriptionController.text.trim(),
                         selectedDate: extractDate(selectedDate)),
                   ).then(
                     (value) {
