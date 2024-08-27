@@ -1,20 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:to_do_app/core/utils.dart';
+import 'package:to_do_app/model/user_model.dart';
 import 'package:to_do_app/services/snack_bar_service.dart';
 
 import '../model/task_model.dart';
 
 class FirebaseUtils {
-  static String uid = "";
+  static FirebaseAuth auth = FirebaseAuth.instance;
+  static String uid = auth.currentUser?.uid ?? "";
 
   static CollectionReference<TaskModel> getCollectionReference() {
     return FirebaseFirestore.instance
-        .collection(TaskModel.collectionName)
+        .collection('TasksCollection') // Main collection
+        .doc(uid) // User-specific document within the main collection
+        .collection('tasks') // Subcollection for tasks within the user's document
         .withConverter<TaskModel>(
-          fromFirestore: (snapshot, _) => TaskModel.fromJson(snapshot.data()!),
-          toFirestore: (taskModel, _) => taskModel.toJson(),
+      fromFirestore: (snapshot, _) => TaskModel.fromJson(snapshot.data()!),
+      toFirestore: (taskModel, _) => taskModel.toJson(),
+    );
+  }
+
+
+  static CollectionReference<UserModel> getUsersCollectionRef() {
+    return FirebaseFirestore.instance.collection("Users").withConverter(
+          fromFirestore: (snapshot, options) =>
+              UserModel.fromJson(snapshot.data()!),
+          toFirestore: (user, options) => user.toJson(),
         );
   }
 
@@ -41,12 +55,10 @@ class FirebaseUtils {
 
   static Stream<QuerySnapshot<TaskModel>> getRealTimeData(
       DateTime selectedDate) {
-    var collectionRef = getCollectionReference()
-        .where(
-          "selectedDate",
-          isEqualTo: extractDate(selectedDate).millisecondsSinceEpoch,
-        )
-        .where("uid", isEqualTo: uid);
+    var collectionRef = getCollectionReference().where(
+      "selectedDate",
+      isEqualTo: extractDate(selectedDate).millisecondsSinceEpoch,
+    );
     return collectionRef.snapshots();
   }
 
@@ -63,13 +75,20 @@ class FirebaseUtils {
   }
 
   static Future<bool> createAccount(
-      String emailAddress, String password) async {
+    String name,
+    String emailAddress,
+    String password,
+  ) async {
     try {
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
+      addUser(
+        UserModel(name: name, email: emailAddress, password: password,),
+      );
+      credential.user!.sendEmailVerification();
       return Future.value(true);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -84,9 +103,11 @@ class FirebaseUtils {
       }
     } catch (e) {
       print(e);
+      SnackBarService.showErrorMessage("Something went wrong");
       EasyLoading.dismiss();
       return Future.value(false);
     }
+    SnackBarService.showErrorMessage("Something went wrong");
     EasyLoading.dismiss();
     return Future.value(false);
   }
@@ -95,7 +116,7 @@ class FirebaseUtils {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailAddress, password: password);
-      uid = credential.user?.email?? "";
+      uid = credential.user!.uid;
       return Future.value(true);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -113,4 +134,31 @@ class FirebaseUtils {
     SnackBarService.showErrorMessage('Something went wrong!');
     return Future.value(false);
   }
+
+  static signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
+  static Future<void> addUser(UserModel user) async {
+    var collectionRef = getUsersCollectionRef();
+    var docRef = collectionRef.doc();
+    user.id = docRef.id;
+    return docRef.set(user);
+  }
+
+  // static Future<bool> usedEmail(String email) async {
+  //   var collectionRef = getUsersCollectionRef().where("email", isEqualTo: email);
+  //   var docRef = await collectionRef.get();
+  //
+  //   var data = await collectionRef.get();
+  //   var userList = data.docs.map((e) => e.data()).toList();
+  //   UserModel user = userList[0];
+  //
+  //   if(user.id == null){
+  //     return Future.value(false);
+  //   } else {
+  //     return Future.value(true);
+  //   }
+  // }
+
 }

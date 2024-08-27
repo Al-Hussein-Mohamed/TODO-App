@@ -4,11 +4,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/core/firebase_utils.dart';
+import 'package:to_do_app/custom_widgets/custom_button.dart';
 import 'package:to_do_app/model/task_model.dart';
 import 'package:to_do_app/services/snack_bar_service.dart';
 
 import '../../../core/setting_provider.dart';
 import '../../../core/utils.dart';
+import '../tasks_view.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({super.key});
@@ -22,6 +24,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   var titleController = TextEditingController();
   var descriptionController = TextEditingController();
   var valid = true;
+  var first = true;
   DateTime selectedDate = DateTime.now();
 
   @override
@@ -35,6 +38,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     var secondaryColor =
         provider.isDark() ? const Color(0xFF141922) : Colors.white;
     var textColor = provider.isDark() ? Colors.white : Colors.black;
+    if (first) {
+      selectedDate = provider.focusDate;
+      first = false;
+    }
     return Container(
       padding: EdgeInsets.only(
         left: 25,
@@ -180,42 +187,36 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             SizedBox(
               height: screenHeight * .05,
             ),
-            InkWell(
-              onTap: () {
-                if (formKey.currentState!.validate()) {
-                  setState(() => valid = true,);
-                  EasyLoading.show();
-                  FirebaseUtils.addTaskToFirestore(
-                    TaskModel(
-                        title: titleController.text.trim(),
-                        description: descriptionController.text.trim(),
-                        selectedDate: extractDate(selectedDate)),
-                  ).then(
-                    (value) {
-                      Navigator.pop(context);
-                      EasyLoading.dismiss();
-                    },
-                  );
-                } else {
-                  setState(() => valid = false,);
-                }
-                print(valid);
-              },
-              child: Container(
-                width: screenWidth * .7,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                  color: theme.primaryColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(
-                  lang.addTask,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: secondaryColor),
-                ),
-              ),
-            ),
+            CustomButton(onTap: () {
+              if (formKey.currentState!.validate()) {
+                setState(
+                      () => valid = true,
+                );
+                EasyLoading.show();
+                FirebaseUtils.addTaskToFirestore(
+                  TaskModel(
+                    title: titleController.text.trim(),
+                    description: descriptionController.text.trim(),
+                    selectedDate: extractDate(selectedDate),
+                  ),
+                ).then(
+                      (value) {
+                    provider.changeDate(selectedDate);
+                    Navigator.pop(context);
+                    EasyLoading.dismiss();
+                  },
+                );
+              } else {
+                setState(
+                      () => valid = false,
+                );
+              }
+            }, backgroundColor: theme.primaryColor, widget: Text(
+              lang.addTask,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(color: secondaryColor),
+            ),),
           ],
         ),
       ),
@@ -225,7 +226,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   getSelectedDate() async {
     var curDate = await showDatePicker(
         context: context,
-        firstDate: DateTime.now(),
+        initialDate: selectedDate,
+        firstDate: DateTime(2024),
         lastDate: DateTime.now().add(const Duration(days: 365)));
     if (curDate != null) {
       setState(() {

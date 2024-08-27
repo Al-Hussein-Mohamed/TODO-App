@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/core/firebase_utils.dart';
 import 'package:to_do_app/core/utils.dart';
+import 'package:to_do_app/custom_widgets/custom_button.dart';
 import 'package:to_do_app/services/snack_bar_service.dart';
 
 import '../../../core/setting_provider.dart';
@@ -213,12 +214,11 @@ class _EditTaskViewState extends State<EditTaskView> {
                                     ),
                                     borderRadius: provider.isEn()
                                         ? const BorderRadius.only(
-                                        topLeft: Radius.circular(13),
-                                        bottomLeft: Radius.circular(13))
+                                            topLeft: Radius.circular(13),
+                                            bottomLeft: Radius.circular(13))
                                         : const BorderRadius.only(
-                                        topRight: Radius.circular(13),
-                                        bottomRight:
-                                        Radius.circular(13)),
+                                            topRight: Radius.circular(13),
+                                            bottomRight: Radius.circular(13)),
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 3),
@@ -252,13 +252,11 @@ class _EditTaskViewState extends State<EditTaskView> {
                                     ),
                                     borderRadius: provider.isEn()
                                         ? const BorderRadius.only(
-                                        topRight: Radius.circular(13),
-                                        bottomRight:
-                                        Radius.circular(13))
+                                            topRight: Radius.circular(13),
+                                            bottomRight: Radius.circular(13))
                                         : const BorderRadius.only(
-                                        topLeft: Radius.circular(13),
-                                        bottomLeft:
-                                        Radius.circular(13)),
+                                            topLeft: Radius.circular(13),
+                                            bottomLeft: Radius.circular(13)),
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 3),
@@ -341,60 +339,41 @@ class _EditTaskViewState extends State<EditTaskView> {
                     SizedBox(
                       height: screenHeight * .06,
                     ),
-                    InkWell(
-                      onTap: () {
-                        if (formKey.currentState!.validate()) {
-                          EasyLoading.show();
-                          taskModel.title = titleController.text.trim();
-                          taskModel.description = descriptionController.text.trim();
-                          FirebaseUtils.updateTask(taskModel).then(
-                            (value) {
-                              Navigator.pop(context);
-                              EasyLoading.dismiss();
-                            },
-                          );
-                        }
-                        setState(() {
-
-                        },);
-                      },
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        width: screenWidth * .7,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: theme.primaryColor,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Text(
-                          lang.save,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.titleMedium
-                              ?.copyWith(color: secondaryColor),
-                        ),
-                      ),
-                    ),
+                    CustomButton(onTap: () {
+                      if (formKey.currentState!.validate()) {
+                        EasyLoading.show();
+                        taskModel.title = titleController.text.trim();
+                        taskModel.description =
+                            descriptionController.text.trim();
+                        FirebaseUtils.updateTask(taskModel).then(
+                              (value) {
+                            Navigator.pop(context);
+                            EasyLoading.dismiss();
+                          },
+                        );
+                      }
+                      setState(
+                            () {},
+                      );
+                    }, backgroundColor: theme.primaryColor, widget: Text(
+                      lang.save,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(color: secondaryColor),
+                    ),),
                     SizedBox(
                       height: screenHeight * .02,
                     ),
-                    InkWell(
+                    CustomButton(
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        width: screenWidth * .7,
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Text(
-                          lang.cancel,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.titleMedium
-                              ?.copyWith(color: secondaryColor),
-                        ),
+                      backgroundColor: Colors.red,
+                      widget: Text(
+                        lang.cancel,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.titleMedium
+                            ?.copyWith(color: secondaryColor),
                       ),
                     ),
                   ],

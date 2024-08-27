@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -26,6 +27,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    var auth = FirebaseAuth.instance;
     var provider = Provider.of<SettingProvider>(context);
     var lang = AppLocalizations.of(context)!;
     var theme = Theme.of(context);
@@ -224,14 +226,18 @@ class _LoginViewState extends State<LoginView> {
                             .then(
                           (value) {
                             if (value) {
-                              EasyLoading.dismiss();
-                              SnackBarService.showSuccessMessage(
-                                  "Login successfully");
-                              Navigator.pushReplacementNamed(
-                                  context, PageRouteNames.layout);
-                            } else {
-                              SnackBarService.showErrorMessage(
-                                  "there is no account with this E-mail and password!");
+                              if(auth.currentUser!.emailVerified) {
+                                EasyLoading.dismiss();
+                                SnackBarService.showSuccessMessage(
+                                    "Login successfully");
+                                Navigator.pushReplacementNamed(
+                                    context, PageRouteNames.layout);
+                              } else {
+                                EasyLoading.dismiss();
+                                SnackBarService.showErrorMessage(
+                                    "Verify your E-mail!");
+                                FirebaseUtils.signOut();
+                              }
                             }
                           },
                         );

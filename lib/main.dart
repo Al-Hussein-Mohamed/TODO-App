@@ -1,9 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_app/core/application_theme_manager.dart';
+import 'package:to_do_app/core/firebase_utils.dart';
 import 'package:to_do_app/core/page_route_names.dart';
 import 'package:to_do_app/core/route_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,11 +24,10 @@ void main() async {
   );
   runApp(
     ChangeNotifierProvider(
-      create: (context) => SettingProvider(),
+      create: (context) => SettingProvider()..getLanguage()..getTheme(),
       child: const MyApp(),
     ),
   );
-  configLoading();
 }
 
 class MyApp extends StatelessWidget {
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<SettingProvider>(context);
+    configLoading(provider.isDark());
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,

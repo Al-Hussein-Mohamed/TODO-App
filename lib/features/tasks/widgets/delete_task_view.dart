@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/core/firebase_utils.dart';
+import 'package:to_do_app/custom_widgets/custom_button.dart';
 import '../../../core/setting_provider.dart';
 import '../../../model/task_model.dart';
 
@@ -43,51 +44,37 @@ class DeleteTaskView extends StatelessWidget {
               SizedBox(
                 height: screenHeight * .04,
               ),
-              InkWell(
+              CustomButton(
                 onTap: () {
                   EasyLoading.show();
-                  FirebaseUtils.deleteTask(taskModel).then((value) {
-                    Navigator.pop(context);
-                    EasyLoading.dismiss();
-                  },);
+                  FirebaseUtils.deleteTask(taskModel).then(
+                    (value) {
+                      Navigator.pop(context);
+                      EasyLoading.dismiss();
+                    },
+                  );
                 },
-                borderRadius: BorderRadius.circular(15),
-                child: Container(
-                  width: screenWidth * .7,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Text(
-                    lang.delete,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.titleMedium
-                        ?.copyWith(color: secondaryColor),
-                  ),
+                backgroundColor: Colors.red,
+                widget: Text(
+                  lang.delete,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(color: secondaryColor),
                 ),
               ),
               SizedBox(
                 height: screenHeight * .02,
               ),
-              InkWell(
+              CustomButton(
                 onTap: () {
                   Navigator.pop(context);
                 },
-                borderRadius: BorderRadius.circular(15),
-                child: Container(
-                  width: screenWidth * .7,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: theme.primaryColor,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Text(
-                    lang.cancel,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.titleMedium
-                        ?.copyWith(color: secondaryColor),
-                  ),
+                backgroundColor: theme.primaryColor,
+                widget: Text(
+                  lang.cancel,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(color: secondaryColor),
                 ),
               ),
             ],

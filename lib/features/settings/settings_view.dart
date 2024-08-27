@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:to_do_app/core/application_theme_manager.dart';
 import 'package:to_do_app/core/firebase_utils.dart';
 import 'package:to_do_app/core/setting_provider.dart';
+import 'package:to_do_app/custom_widgets/custom_button.dart';
 
 import '../../core/page_route_names.dart';
 
@@ -119,36 +120,30 @@ class SettingsView extends StatelessWidget {
               SizedBox(
                 height: screenHeight * 0.07,
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 17),
-                decoration: BoxDecoration(
-                  color: secondaryColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    FirebaseUtils.uid = "";
-                    Navigator.pushReplacementNamed(
-                        context, PageRouteNames.login);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        lang.logout,
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: textColor,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Icon(
-                        Icons.logout_rounded,
+              CustomButton(
+                onTap: () {
+                  FirebaseUtils.signOut();
+                  Navigator.pushReplacementNamed(context, PageRouteNames.login);
+                },
+                backgroundColor: secondaryColor,
+                padding: 18,
+                widget: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      lang.logout,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleMedium?.copyWith(
                         color: textColor,
-                        size: 25,
+                        fontWeight: FontWeight.w700,
                       ),
-                    ],
-                  ),
+                    ),
+                    Icon(
+                      Icons.logout_rounded,
+                      color: textColor,
+                      size: 25,
+                    ),
+                  ],
                 ),
               ),
             ],

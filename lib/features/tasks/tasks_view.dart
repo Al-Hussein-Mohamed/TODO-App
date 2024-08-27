@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_app/core/firebase_utils.dart';
 import 'package:to_do_app/core/setting_provider.dart';
 import 'package:to_do_app/features/tasks/widgets/task_item_widget.dart';
 
+import '../../core/utils.dart';
 import '../../model/task_model.dart';
 
 class TasksView extends StatefulWidget {
@@ -18,9 +20,7 @@ class TasksView extends StatefulWidget {
 }
 
 class _TasksViewState extends State<TasksView> {
-  final EasyInfiniteDateTimelineController _controller =
-      EasyInfiniteDateTimelineController();
-  var _focusDate = DateTime.now();
+  var firstDate = DateTime(2024);
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +33,7 @@ class _TasksViewState extends State<TasksView> {
     var secondaryColor =
         provider.isDark() ? const Color(0xFF141922) : Colors.white;
     var textColor = provider.isDark() ? Colors.white : Colors.black;
+
     return Column(
       children: [
         Stack(
@@ -45,14 +46,52 @@ class _TasksViewState extends State<TasksView> {
                   top: screenHeight * .08,
                   left: screenWidth * .1,
                   right: screenWidth * .1),
-              child: Text(
-                lang.todoList,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontSize: 32,
-                  color: provider.isDark()
-                      ? const Color(0xFF060E1E)
-                      : Colors.white,
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: screenHeight * .065,
+                  left: screenWidth * .1,
+                  right: screenWidth * .1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    lang.todoList,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontSize: 35,
+                      color: provider.isDark()
+                          ? const Color(0xFF060E1E)
+                          : Colors.white,
+                    ),
+                  ),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () async {
+                        DateTime? date =
+                            await getSelectedDate(provider.focusDate);
+                        if (date != null) {
+                          provider.changeDate(date);
+                        }
+                      },
+                      onLongPress: () => setState(
+                        () {
+                          provider.changeDate(DateTime.now());
+                        },
+                      ),
+                      customBorder: const CircleBorder(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.calendar_month,
+                          size: 40,
+                          color: secondaryColor,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
             Column(
@@ -62,16 +101,15 @@ class _TasksViewState extends State<TasksView> {
                 ),
                 EasyInfiniteDateTimeLine(
                   selectionMode: const SelectionMode.alwaysFirst(),
-                  controller: _controller,
-                  firstDate: DateTime(2024),
-                  focusDate: _focusDate,
+                  controller: provider.controller,
+                  firstDate: firstDate,
+                  focusDate: provider.focusDate,
                   lastDate: DateTime.now().add(
                     const Duration(days: 365),
                   ),
+                  locale: provider.curLanguage,
                   onDateChange: (selectedDate) {
-                    setState(() {
-                      _focusDate = selectedDate;
-                    });
+                    provider.changeDate(selectedDate);
                   },
                   showTimelineHeader: false,
                   dayProps: EasyDayProps(
@@ -85,11 +123,22 @@ class _TasksViewState extends State<TasksView> {
                       decoration: BoxDecoration(
                         color: secondaryColor.withOpacity(0.95),
                         borderRadius: BorderRadius.circular(12),
+                        border: sameDay(provider.focusDate)
+                            ? Border.all(
+                                color: provider.isDark()
+                                    ? const Color(0xFF1F5AA4)
+                                    : const Color(0xFF3C80C5),
+                                width: 3,
+                              )
+                            : Border.all(
+                                color: secondaryColor,
+                                width: 0,
+                              ),
                       ),
                     ),
                     inactiveDayStyle: DayStyle(
                       dayNumStyle: theme.textTheme.bodyLarge?.copyWith(
-                          fontSize: 17,
+                          fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: textColor),
                       monthStrStyle: theme.textTheme.bodyMedium?.copyWith(
@@ -107,7 +156,7 @@ class _TasksViewState extends State<TasksView> {
                     ),
                     todayStyle: DayStyle(
                       dayNumStyle: theme.textTheme.bodyLarge?.copyWith(
-                          fontSize: 17,
+                          fontSize: 18,
                           fontWeight: FontWeight.w600,
                           color: textColor),
                       monthStrStyle: theme.textTheme.bodyMedium?.copyWith(
@@ -121,7 +170,14 @@ class _TasksViewState extends State<TasksView> {
                       decoration: BoxDecoration(
                         color: secondaryColor.withOpacity(0.95),
                         borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: provider.isDark()
+                              ? const Color(0xFF1F5AA4)
+                              : const Color(0xFF3C80C5),
+                          width: 3,
+                        ),
                       ),
+                      borderRadius: 50,
                     ),
                   ),
                   timeLineProps: const EasyTimeLineProps(
@@ -138,7 +194,7 @@ class _TasksViewState extends State<TasksView> {
         ),
         Expanded(
           child: StreamBuilder<QuerySnapshot<TaskModel>>(
-            stream: FirebaseUtils.getRealTimeData(_focusDate),
+            stream: FirebaseUtils.getRealTimeData(provider.focusDate),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Expanded(
@@ -169,7 +225,10 @@ class _TasksViewState extends State<TasksView> {
                     (e) => e.data(),
                   )
                   .toList();
-              tasksList?.sort((a, b) => convertBoolToInt(a.isDone).compareTo(convertBoolToInt(b.isDone)),);
+              tasksList?.sort(
+                (a, b) => convertBoolToInt(a.isDone)
+                    .compareTo(convertBoolToInt(b.isDone)),
+              );
 
               return tasksList == null || tasksList.isEmpty
                   ? Expanded(
@@ -197,7 +256,23 @@ class _TasksViewState extends State<TasksView> {
     );
   }
 
-  int convertBoolToInt(bool b){
+  int convertBoolToInt(bool b) {
     return b ? 1 : 0;
+  }
+
+  Future<DateTime?> getSelectedDate(DateTime focusDate) async {
+    return await showDatePicker(
+      context: context,
+      initialDate: focusDate,
+      firstDate: firstDate,
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    );
+  }
+
+  bool sameDay(DateTime focusDate) {
+    if (focusDate.year != DateTime.now().year) return false;
+    if (focusDate.month != DateTime.now().month) return false;
+    if (focusDate.day != DateTime.now().day) return false;
+    return true;
   }
 }

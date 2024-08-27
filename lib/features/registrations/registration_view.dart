@@ -147,11 +147,13 @@ class _RegistrationViewState extends State<RegistrationView> {
                     decoration: InputDecoration(
                       labelText: lang.email,
                       labelStyle: theme.textTheme.titleLarge?.copyWith(
-                        color: emailValidation ? theme.primaryColor : Colors.red,
+                        color:
+                            emailValidation ? theme.primaryColor : Colors.red,
                       ),
                       suffixIcon: Icon(
                         Icons.email,
-                        color: emailValidation ? theme.primaryColor : Colors.red,
+                        color:
+                            emailValidation ? theme.primaryColor : Colors.red,
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       enabledBorder: OutlineInputBorder(
@@ -210,37 +212,37 @@ class _RegistrationViewState extends State<RegistrationView> {
                         },
                         icon: isObsecure
                             ? Icon(
-                          Icons.visibility,
-                          color: passwordValidation
-                              ? theme.primaryColor
-                              : Colors.red,
-                        )
+                                Icons.visibility,
+                                color: passwordValidation
+                                    ? theme.primaryColor
+                                    : Colors.red,
+                              )
                             : Icon(
-                          Icons.visibility_off,
-                          color: passwordValidation
-                              ? theme.primaryColor
-                              : Colors.red,
-                        ),
+                                Icons.visibility_off,
+                                color: passwordValidation
+                                    ? theme.primaryColor
+                                    : Colors.red,
+                              ),
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: theme.primaryColor, width: 1.0),
+                            BorderSide(color: theme.primaryColor, width: 1.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                        BorderSide(color: theme.primaryColor, width: 2.0),
+                            BorderSide(color: theme.primaryColor, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderSide:
-                        const BorderSide(color: Colors.red, width: 2.0),
+                            const BorderSide(color: Colors.red, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderSide:
-                        const BorderSide(color: Colors.red, width: 2.0),
+                            const BorderSide(color: Colors.red, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
@@ -253,14 +255,15 @@ class _RegistrationViewState extends State<RegistrationView> {
                       if (formKey.currentState!.validate()) {
                         EasyLoading.show();
                         FirebaseUtils.createAccount(
-                                emailController.text, passwordController.text)
-                            .then(
+                          fullNameController.text,
+                          emailController.text,
+                          passwordController.text,
+                        ).then(
                           (value) {
-                            print(value);
                             if (value) {
                               EasyLoading.dismiss();
                               SnackBarService.showSuccessMessage(
-                                  "Account has been created successfully");
+                                  "A verification message has been sent to your E-mail");
                               Navigator.pop(context);
                             }
                           },
