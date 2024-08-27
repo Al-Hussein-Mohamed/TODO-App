@@ -33,6 +33,7 @@ class _EditTaskViewState extends State<EditTaskView> {
   var titleController = TextEditingController();
   var descriptionController = TextEditingController();
   var selectedDate = DateTime.now();
+  var firstDate = DateTime(2024);
   bool titleValidation = true;
 
   @override
@@ -294,6 +295,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                       height: screenHeight * .04,
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           flex: 1,
@@ -323,13 +325,16 @@ class _EditTaskViewState extends State<EditTaskView> {
                             onTap: () {
                               getSelectedDate();
                             },
-                            child: Text(
-                              DateFormat("dd / MM / yyyy")
-                                  .format(taskModel.selectedDate),
-                              textAlign: TextAlign.center,
-                              style: theme.textTheme.displayLarge?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: textColor,
+                            child: Container(
+                              color: secondaryColor,
+                              child: Text(
+                                DateFormat("dd / MM / yyyy")
+                                    .format(taskModel.selectedDate),
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.displayLarge?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: textColor,
+                                ),
                               ),
                             ),
                           ),
@@ -347,6 +352,7 @@ class _EditTaskViewState extends State<EditTaskView> {
                             descriptionController.text.trim();
                         FirebaseUtils.updateTask(taskModel).then(
                               (value) {
+                                provider.changeDate(taskModel.selectedDate);
                             Navigator.pop(context);
                             EasyLoading.dismiss();
                           },
@@ -389,7 +395,8 @@ class _EditTaskViewState extends State<EditTaskView> {
   getSelectedDate() async {
     var curDate = await showDatePicker(
         context: context,
-        firstDate: DateTime.now(),
+        initialDate: taskModel.selectedDate,
+        firstDate: DateTime(2024),
         lastDate: DateTime.now().add(const Duration(days: 365)));
     if (curDate != null) {
       setState(() => taskModel.selectedDate = extractDate(curDate));

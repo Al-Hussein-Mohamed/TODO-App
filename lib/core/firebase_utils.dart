@@ -88,6 +88,15 @@ class FirebaseUtils {
       addUser(
         UserModel(name: name, email: emailAddress, password: password,),
       );
+
+      var ref = FirebaseFirestore.instance
+          .collection('TasksCollection') // Main collection
+          .doc(uid) // User-specific document within the main collection
+          .withConverter<TaskModel>(
+        fromFirestore: (snapshot, _) => TaskModel.fromJson(snapshot.data()!),
+        toFirestore: (taskModel, _) => taskModel.toJson(),
+      );
+
       credential.user!.sendEmailVerification();
       return Future.value(true);
     } on FirebaseAuthException catch (e) {
